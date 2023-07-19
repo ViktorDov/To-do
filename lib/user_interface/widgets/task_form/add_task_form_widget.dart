@@ -2,35 +2,27 @@ import 'package:flutter/material.dart';
 import 'add_task_form_widget_model.dart';
 
 class AddTaskFormWidget extends StatefulWidget {
-  const AddTaskFormWidget({super.key});
+  final int groupKey;
+  const AddTaskFormWidget({super.key, required this.groupKey});
 
   @override
   State<AddTaskFormWidget> createState() => _AddTaskFormWidgetState();
 }
 
 class _AddTaskFormWidgetState extends State<AddTaskFormWidget> {
-  AddTasksFromWidgetModel? _model;
+  late final AddTasksFromWidgetModel _model;
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (_model == null) {
-      final groupKey = ModalRoute.of(context)!.settings.arguments as int;
-      _model = AddTasksFromWidgetModel(groupKey: groupKey);
-    }
+  void initState() {
+    super.initState();
+    _model = AddTasksFromWidgetModel(groupKey: widget.groupKey);
   }
 
   @override
   Widget build(BuildContext context) {
-    final model = _model;
-    if (model != null) {
-      return AddTasksFromWidgetProvider(
-        model: model,
-        child: const _AddTaskFormWidgetBody(),
-      );
-    } else {
-      return const CircularProgressIndicator();
-    }
+    return AddTasksFromWidgetProvider(
+      model: _model,
+      child: const _AddTaskFormWidgetBody(),
+    );
   }
 }
 
